@@ -1,3 +1,4 @@
+import Auth from './Page/Auth/Auth';
 import logo from './logo.svg';
 import './App.css';
 import { ThemeProvider } from '@mui/material';
@@ -7,6 +8,7 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       banana
+      <Auth/>
     </ThemeProvider>
   );
 }
