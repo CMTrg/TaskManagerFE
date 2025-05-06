@@ -19,9 +19,7 @@ const LoginForm = ({ togglePanel }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // You can add custom validation here
-    // For example, checking if the fields are empty or have specific patterns
-    // Update the errors state accordingly
+
     let errorText = "";
     if (name === "email") {
       errorText =
