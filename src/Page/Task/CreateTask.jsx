@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
@@ -8,6 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
 import { createNewTask } from '../../ReduxToolkit/TaskSlice'; // sửa đúng tên action nhé
+
 
 const style = {
   position: 'absolute',
@@ -26,12 +29,14 @@ const tags = ["Angular", "React", "Vuejs", "Spring boot", "Node js", "Python"];
 export default function CreateNewTaskForm({ handleClose, open }) {
   const dispatch = useDispatch();
 
+
   const [formData, setFormData] = useState({
     title: "",
     image: "",
     description: "",
     tags: [],
     deadline: dayjs(), // dùng dayjs thay cho Date để tương thích
+
   });
 
   const [selectedTags, setSelectedTags] = useState([]);
@@ -63,6 +68,7 @@ export default function CreateNewTaskForm({ handleClose, open }) {
     return new Date(year, month, day, hours, minutes, seconds, milliseconds).toISOString();
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const finalData = {
@@ -75,11 +81,18 @@ export default function CreateNewTaskForm({ handleClose, open }) {
     handleClose();
   };
 
+
+    dispatch(createTask(finalData));
+    console.log("Submitted:", finalData);
+    handleClose();
+  };
+
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2} alignItems="center">
+
             <Grid item xs={12}>
               <TextField
                 label="Title"
@@ -98,6 +111,7 @@ export default function CreateNewTaskForm({ handleClose, open }) {
                 onChange={handleChange}
               />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 label="Description"
@@ -109,6 +123,7 @@ export default function CreateNewTaskForm({ handleClose, open }) {
                 onChange={handleChange}
               />
             </Grid>
+
             <Grid item xs={12}>
               <Autocomplete
                 multiple
@@ -121,6 +136,7 @@ export default function CreateNewTaskForm({ handleClose, open }) {
                 )}
               />
             </Grid>
+
             <Grid item xs={12}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
@@ -136,6 +152,7 @@ export default function CreateNewTaskForm({ handleClose, open }) {
                 fullWidth
                 className="customeButton"
                 type="submit"
+
                 sx={{ padding: ".9rem" }}
               >
                 Create

@@ -7,6 +7,7 @@ import TaskCard from "../Task/TaskCard/TaskCard";
 const TaskList = () => {
   const dispatch = useDispatch();
   const { task, auth } = useSelector((store) => store);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const filterValue = queryParams.get("filter");
@@ -19,12 +20,14 @@ const TaskList = () => {
     }
   }, [dispatch, filterValue, auth.user?.role]);
 
+
   return (
     <div className="w-[67vw]">
       <div className="space-y-3">
         {task.tasks.map((item) => (
           <TaskCard key={item.id} item={item} />
         ))}
+
       </div>
     </div>
   );

@@ -8,7 +8,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewTask, fetchTaskById, updateTask } from '../../../ReduxToolkit/TaskSlice';
+
 import { useLocation } from 'react-router-dom';
+import dayjs from 'dayjs';
+
+import { fetchTaskById, updateTask } from '../../../ReduxToolkit/TaskSlice';
 
 const style = {
   position: 'absolute',
@@ -38,6 +42,7 @@ export default function EditTaskForm({ handleClose, open }) {
     description: "",
     tags: [],
     deadline: dayjs(),
+
   });
 
   const [selectedTags, setSelectedTags] = useState([]);
@@ -63,6 +68,7 @@ export default function EditTaskForm({ handleClose, open }) {
 
   const formatDate = (input) => {
     return input?.toISOString ? input.toISOString() : new Date(input).toISOString();
+
   };
 
   const handleSubmit = (e) => {
@@ -102,6 +108,7 @@ export default function EditTaskForm({ handleClose, open }) {
                 label="Title"
                 fullWidth
                 name="title"
+
                 value={formData.title}
                 onChange={handleChange}
               />
@@ -111,6 +118,7 @@ export default function EditTaskForm({ handleClose, open }) {
                 label="Image"
                 fullWidth
                 name="image"
+
                 value={formData.image}
                 onChange={handleChange}
               />
@@ -122,6 +130,7 @@ export default function EditTaskForm({ handleClose, open }) {
                 multiline
                 rows={4}
                 name="description"
+
                 value={formData.description}
                 onChange={handleChange}
               />
@@ -134,6 +143,7 @@ export default function EditTaskForm({ handleClose, open }) {
                 onChange={handleTagsChange}
                 getOptionLabel={(option) => option}
                 renderInput={(params) => <TextField {...params} label="Tags" fullWidth />}
+
               />
             </Grid>
             <Grid item xs={12}>
@@ -151,6 +161,7 @@ export default function EditTaskForm({ handleClose, open }) {
                 fullWidth
                 className="customButton"
                 type="submit"
+
                 sx={{ padding: ".9rem" }}
               >
                 Update

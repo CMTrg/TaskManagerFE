@@ -53,6 +53,7 @@ const TaskCard = ({ item }) => {
     const updatedParams = new URLSearchParams(location.search);
     updatedParams.set("taskId", item.id);
     navigate(`${location.pathname}?${updatedParams.toString()}`);
+
     setOpenSubmissionList(true);
     handleMenuClose();
   };
@@ -63,14 +64,17 @@ const TaskCard = ({ item }) => {
     const updatedParams = new URLSearchParams(location.search);
     updatedParams.set("taskId", item.id);
     navigate(`${location.pathname}?${updatedParams.toString()}`);
+
     setOpenUpdateTaskForm(true);
     handleMenuClose();
   };
+
 
   const handleDeleteTask = () => {
     dispatch(deleteTask(item.id));
     handleMenuClose();
   };
+
 
   return (
     <div>
@@ -78,6 +82,7 @@ const TaskCard = ({ item }) => {
         <div className='lg:flex gap-5 items-center space-y-2 w-[90%] lg:w-[70%]'>
           <div className='lg:w-[7rem] lg:h-[7rem] object-cover'>
             <img src={item.image} alt="" />
+
           </div>
           <div className='space-y-5'>
             <div className='space-y-2'>
@@ -104,6 +109,7 @@ const TaskCard = ({ item }) => {
           >
             <MoreVertIcon />
           </IconButton>
+
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
@@ -129,6 +135,7 @@ const TaskCard = ({ item }) => {
       <SubmissionList open={OpenSubmissionList} handleClose={handleCloseSubmissionList} />
       <EditTaskForm item={item} open={OpenUpdateTaskForm} handleClose={handleCloseUpdateTaskForm} />
       <SubmitFormModel open={OpenSubmitFormModel} handleClose={handleCloseSubmitFormModel} />
+
     </div>
   );
 };

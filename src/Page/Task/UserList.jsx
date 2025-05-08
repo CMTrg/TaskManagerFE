@@ -7,6 +7,7 @@ import { Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { assignedTaskToUser } from '../../ReduxToolkit/TaskSlice';
 import { getUserList } from '../../ReduxToolkit/AuthSlice';
+
 import { useLocation } from 'react-router-dom';
 
 const style = {
@@ -17,6 +18,7 @@ const style = {
   width: 400,
   bgcolor: 'background.paper',
   outline: "none",
+
   boxShadow: 24,
   p: 2,
 };
@@ -24,6 +26,7 @@ const style = {
 export default function UserList({ handleClose, open }) {
   const dispatch = useDispatch();
   const { auth } = useSelector((store) => store);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const taskId = queryParams.get("taskId");
@@ -67,6 +70,7 @@ export default function UserList({ handleClose, open }) {
             {index !== auth.users.length - 1 && <Divider variant="inset" />}
           </React.Fragment>
         ))}
+
       </Box>
     </Modal>
   );

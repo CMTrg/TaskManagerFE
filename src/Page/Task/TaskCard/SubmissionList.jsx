@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { fetchSubmissionsByTaskId } from '../../../ReduxToolkit/SubmissionSlice';
 
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -32,6 +33,7 @@ export default function SubmissionList({ handleClose, open }) {
     }
   }, [dispatch, taskId]);
 
+
   return (
     <Modal
       open={open}
@@ -49,6 +51,7 @@ export default function SubmissionList({ handleClose, open }) {
         ) : (
           <div className='text-center'>No Submission Found</div>
         )}
+
       </Box>
     </Modal>
   );

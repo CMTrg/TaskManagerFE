@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch } from "react-redux";
 import { acceptDeclineSubmission } from '../../../ReduxToolkit/SubmissionSlice';
 
+
 const SubmissionCard = ({ item }) => {
   const dispatch = useDispatch();
 
@@ -20,6 +21,7 @@ const SubmissionCard = ({ item }) => {
         <div className='flex items-center gap-2'>
           <span>GitHub:</span>
           <div className='flex items-center gap-2 text-[#c24dd0]'>
+
             <OpenInNewIcon />
             <a href={item.githubLink} target="_blank" rel="noopener noreferrer">
               Go To Link

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { submitTask } from '../../../ReduxToolkit/SubmissionSlice';
 
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -20,6 +21,7 @@ const style = {
 };
 
 export default function SubmitFormModel({ handleClose, open }) {
+
   const dispatch = useDispatch();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -33,6 +35,7 @@ export default function SubmitFormModel({ handleClose, open }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
   };
 
   const handleSubmit = (e) => {
@@ -73,6 +76,7 @@ export default function SubmitFormModel({ handleClose, open }) {
                 type="submit"
                 sx={{ padding: ".9rem" }}
               >
+
                 Submit
               </Button>
             </Grid>
