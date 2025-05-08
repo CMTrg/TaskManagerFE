@@ -14,13 +14,14 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  outline:"none",
   boxShadow: 24,
   p: 4,
 };
 const tags=["Angular", "React", "Vuejs", "Spring boot", "Node js", "Python"]
 
 export default function CreateNewTaskForm({handleClose,open}) {
+    const dispatch=useDispatch();
     const [formData,setformData]=useState({
         title:"",
         image:"",
@@ -76,6 +77,7 @@ export default function CreateNewTaskForm({handleClose,open}) {
         const {deadline}=formData;
         formData.deadline=formateData(deadline);
         formData.tags=selectedTags
+        dispatch(createTask(formData))
         console.log("formData",formData,"deadline : ",formData.deadline)
         handleClose()
     };
