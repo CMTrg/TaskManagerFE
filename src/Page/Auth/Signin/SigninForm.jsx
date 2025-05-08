@@ -83,9 +83,9 @@ const LoginForm = ({ togglePanel }) => {
       </form>
 
       <div className="textStyle mt-5 flex items-center gap-2 py-5 justify-center">
-        <span>Already have an account?</span>
-        <Button className="" onClick={togglePanel} color="primary">
-          signup
+        <span>Don't have an account?</span>
+        <Button type="button" className="" onClick={togglePanel} color="primary">
+          Sign up
         </Button>
       </div>
     </div>

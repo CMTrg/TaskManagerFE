@@ -1,8 +1,7 @@
-// taskSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { api, setAuthHeader } from "../api/api";
 
+// 📥 Admin fetch all tasks
 export const fetchTasks = createAsyncThunk(
   "task/fetchTasks",
   async ({ status, sortByCreatedAt, sortByDeadline }) => {
@@ -11,103 +10,100 @@ export const fetchTasks = createAsyncThunk(
       const response = await api.get("/api/tasks", {
         params: { status, sortByDeadline, sortByCreatedAt },
       });
-      console.log("fetch tasks ", response.data);
       return response.data;
     } catch (error) {
-      throw Error(error.response.data.error);
+      throw Error(error?.response?.data?.error || "Fetch tasks failed");
     }
   }
 );
 
+// 📥 User fetch assigned tasks
 export const fetchUsersTasks = createAsyncThunk(
   "task/fetchUsersTasks",
-  async ({ status, sortByCreatedAt, sortByDeadline,jwt }) => {
+  async ({ status, sortByCreatedAt, sortByDeadline }) => {
     setAuthHeader(localStorage.getItem("jwt"), api);
     try {
-      const response = await api.get("/api/tasks/user",
-      {params: { status, sortByDeadline, sortByCreatedAt }});
-      console.log("fetch users tasks ", response.data);
+      const response = await api.get("/api/tasks/user", {
+        params: { status, sortByDeadline, sortByCreatedAt },
+      });
       return response.data;
     } catch (error) {
-      throw Error(error.response.data.error);
+      throw Error(error?.response?.data?.error || "Fetch user's tasks failed");
     }
   }
 );
 
+// 📄 Get task by ID
 export const fetchTaskById = createAsyncThunk(
   "task/fetchTaskById",
   async (taskId) => {
     setAuthHeader(localStorage.getItem("jwt"), api);
     try {
       const response = await api.get(`/api/tasks/${taskId}`);
-      console.log("fetch tasks By Id", response.data);
       return response.data;
     } catch (error) {
-      console.log("error", error);
-      throw Error(error.response.data.error);
+      throw Error(error?.response?.data?.error || "Fetch task by ID failed");
     }
   }
 );
 
+// ➕ Create task
 export const createNewTask = createAsyncThunk(
   "task/createNewTask",
   async (taskData) => {
     setAuthHeader(localStorage.getItem("jwt"), api);
     try {
       const response = await api.post("/api/tasks", taskData);
-      console.log("created task", response.data);
       return response.data;
     } catch (error) {
-      throw Error(error.response.data.error);
+      throw Error(error?.response?.data?.error || "Create task failed");
     }
   }
 );
 
+// ✏️ Update task
 export const updateTask = createAsyncThunk(
   "task/updateTask",
   async ({ id, updatedTaskData }) => {
     setAuthHeader(localStorage.getItem("jwt"), api);
     try {
       const response = await api.put(`/api/tasks/${id}`, updatedTaskData);
-      console.log("updated task ", response.data);
       return response.data;
     } catch (error) {
-      console.log("errror", error);
-      throw Error(error.response.data.error);
+      throw Error(error?.response?.data?.error || "Update task failed");
     }
   }
 );
+
+// 👤 Assign task
 export const assignedTaskToUser = createAsyncThunk(
   "task/assignedTaskToUser",
   async ({ userId, taskId }) => {
     setAuthHeader(localStorage.getItem("jwt"), api);
     try {
-      const response = await api.put(
-        `/api/tasks/${taskId}/user/${userId}/assigned`
-      );
-      console.log("assigned task ", response.data);
+      const response = await api.put(`/api/tasks/${taskId}/user/${userId}/assigned`);
       return response.data;
     } catch (error) {
-      console.log("errror", error);
-      throw Error(error.response.data.error);
+      throw Error(error?.response?.data?.error || "Assign task failed");
     }
   }
 );
 
-// /{id}/user/{userId}/assigned
-
-export const deleteTask = createAsyncThunk("task/deleteTask", async (id) => {
-  setAuthHeader(localStorage.getItem("jwt"), api);
-  try {
-    await api.delete(`/api/tasks/${id}`);
-    console.log("deleted");
-    return id;
-  } catch (error) {
-    console.log("error ", error);
-    throw Error(error.response.data.error);
+// ❌ Delete task
+export const deleteTask = createAsyncThunk(
+  "task/deleteTask",
+  async (id) => {
+    setAuthHeader(localStorage.getItem("jwt"), api);
+    try {
+      await api.delete(`/api/tasks/${id}`);
+      return id;
+    } catch (error) {
+      throw Error(error?.response?.data?.error || "Delete task failed");
+    }
   }
-});
+);
 
+// 🧠 Slice config
 const taskSlice = createSlice({
   name: "task",
   initialState: {
@@ -132,31 +128,37 @@ const taskSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+
       .addCase(fetchUsersTasks.fulfilled, (state, action) => {
         state.loading = false;
         state.tasks = action.payload;
       })
+
       .addCase(fetchTaskById.fulfilled, (state, action) => {
         state.loading = false;
         state.taskDetails = action.payload;
       })
+
       .addCase(createNewTask.fulfilled, (state, action) => {
         state.tasks.push(action.payload);
       })
+
       .addCase(updateTask.fulfilled, (state, action) => {
-        const updatedTask = action.payload;
-        state.tasks = state.tasks.map((task) =>
-          task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+        const updated = action.payload;
+        state.tasks = state.tasks.map(task =>
+          task.id === updated.id ? { ...task, ...updated } : task
         );
       })
+
       .addCase(assignedTaskToUser.fulfilled, (state, action) => {
-        const updatedTask = action.payload;
-        state.tasks = state.tasks.map((task) =>
-          task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+        const updated = action.payload;
+        state.tasks = state.tasks.map(task =>
+          task.id === updated.id ? { ...task, ...updated } : task
         );
       })
+
       .addCase(deleteTask.fulfilled, (state, action) => {
-        state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+        state.tasks = state.tasks.filter(task => task.id !== action.payload);
       });
   },
 });

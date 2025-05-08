@@ -115,7 +115,7 @@ const SignupForm = ({ togglePanel }) => {
         <div>
           <Button
             sx={{ padding: ".7rem 0rem" }}
-            className="customeButton"
+            className="customButton"
             variant="contained"
             color="primary"
             type="submit"
@@ -127,7 +127,7 @@ const SignupForm = ({ togglePanel }) => {
       </form>
 
       <div className="textStyle flex items-center gap-2 mt-9 justify-center">
-        <span>have account ?</span>
+        <span>Already have an account?</span>
         <Button className="btn" onClick={togglePanel} color="primary">
           signin
         </Button>
