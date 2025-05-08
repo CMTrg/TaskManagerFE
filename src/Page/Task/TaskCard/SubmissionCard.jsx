@@ -4,24 +4,24 @@ import { Button, IconButton } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch } from "react-redux";
-import { acceptDeclineSubmission } from "../../../ReduxToolkit/TaskSlice"; // <-- Bạn cần sửa đúng path
+import { acceptDeclineSubmission } from '../../../ReduxToolkit/SubmissionSlice';
+
 
 const SubmissionCard = ({ item }) => {
   const dispatch = useDispatch();
 
   const handleAcceptDecline = (status) => {
     dispatch(acceptDeclineSubmission({ id: item.id, status }));
-    console.log("Action:", status);
+    console.log("Submission status updated to:", status);
   };
 
-  if (!item) return null;
-
   return (
-    <div className="rounded-md bg-black p-5 flex items-center justify-between">
-      <div className="space-y-2">
-        <div className="flex items-center gap-2">
+    <div className='rounded-md bg-black p-5 flex items-center justify-between'>
+      <div className='space-y-2'>
+        <div className='flex items-center gap-2'>
           <span>GitHub:</span>
-          <div className="flex items-center gap-2 text-[#c24dd0]">
+          <div className='flex items-center gap-2 text-[#c24dd0]'>
+
             <OpenInNewIcon />
             <a href={item.githubLink} target="_blank" rel="noopener noreferrer">
               Go To Link

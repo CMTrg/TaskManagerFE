@@ -1,5 +1,5 @@
 import React from 'react'
-import TaskList from '../Task/TaskList/TaskList'
+import TaskList from '../TaskList/TaskList'
 import SideBar from './SideBar'
 
 const Home = () => {

@@ -1,11 +1,13 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
-import { Grid, TextField } from '@mui/material';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { submitTask } from '../../../ReduxToolkit/TaskSlice'; // ✅ import đúng
+import { submitTask } from '../../../ReduxToolkit/SubmissionSlice';
+
 
 const style = {
   position: 'absolute',
@@ -14,12 +16,12 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
-export default function SubmitFormModel({ item, handleClose, open }) {
+export default function SubmitFormModel({ handleClose, open }) {
+
   const dispatch = useDispatch();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -32,10 +34,8 @@ export default function SubmitFormModel({ item, handleClose, open }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
   };
 
   const handleSubmit = (e) => {
@@ -70,7 +70,13 @@ export default function SubmitFormModel({ item, handleClose, open }) {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button fullWidth type="submit" className="customeButton" sx={{ padding: ".9rem" }}>
+              <Button
+                fullWidth
+                className="customeButton"
+                type="submit"
+                sx={{ padding: ".9rem" }}
+              >
+
                 Submit
               </Button>
             </Grid>

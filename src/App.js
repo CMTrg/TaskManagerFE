@@ -23,10 +23,10 @@ function App() {
 
   useEffect(()=>{
     if(auth.user?.role==="ROLE_ADMIN"){
-      dispatch(fetchTasks())
+      dispatch(fetchTasks({})) // truyền object rỗng nếu không lọc
     }
     else{
-      dispatch(fetchUsersTasks())
+      dispatch(fetchUsersTasks({}))
     }
   },[auth.user])
   
@@ -37,7 +37,8 @@ function App() {
       <Navbar/>
       <Home />
       </div>:<Auth/> }
-      
+ {/*      <Navbar/>
+      <Home /> */}
       
     </ThemeProvider>
   );

@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  Modal,
-  Grid,
-  TextField,
-  Autocomplete
-} from '@mui/material';
-import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import { useState } from 'react';
+import { Autocomplete, Grid, TextField } from '@mui/material';
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
-import { createTask } from '../../ReduxToolkit/TaskSlice'; // ✅ sửa nếu bạn import khác
+import { useDispatch } from 'react-redux';
+import { createNewTask } from '../../ReduxToolkit/TaskSlice'; // sửa đúng tên action nhé
+
 
 const style = {
   position: 'absolute',
@@ -20,7 +19,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  outline: 'none',
+  outline: "none",
   boxShadow: 24,
   p: 4,
 };
@@ -30,12 +29,14 @@ const tags = ["Angular", "React", "Vuejs", "Spring boot", "Node js", "Python"];
 export default function CreateNewTaskForm({ handleClose, open }) {
   const dispatch = useDispatch();
 
+
   const [formData, setFormData] = useState({
     title: "",
     image: "",
     description: "",
     tags: [],
-    deadline: dayjs(), // ✅ dùng dayjs
+    deadline: dayjs(), // dùng dayjs thay cho Date để tương thích
+
   });
 
   const [selectedTags, setSelectedTags] = useState([]);
@@ -53,13 +54,33 @@ export default function CreateNewTaskForm({ handleClose, open }) {
     setFormData(prev => ({ ...prev, deadline: date }));
   };
 
+  const formatDate = (input) => {
+    const {
+      $y: year,
+      $M: month,
+      $D: day,
+      $H: hours,
+      $m: minutes,
+      $s: seconds,
+      $ms: milliseconds,
+    } = input;
+
+    return new Date(year, month, day, hours, minutes, seconds, milliseconds).toISOString();
+  };
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const finalData = {
       ...formData,
-      deadline: formData.deadline.toISOString(),
+      deadline: formatDate(formData.deadline),
       tags: selectedTags,
     };
+    dispatch(createNewTask(finalData));
+    console.log("Submitted data:", finalData);
+    handleClose();
+  };
+
 
     dispatch(createTask(finalData));
     console.log("Submitted:", finalData);
@@ -70,7 +91,8 @@ export default function CreateNewTaskForm({ handleClose, open }) {
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} alignItems="center">
+
             <Grid item xs={12}>
               <TextField
                 label="Title"
@@ -80,7 +102,6 @@ export default function CreateNewTaskForm({ handleClose, open }) {
                 onChange={handleChange}
               />
             </Grid>
-
             <Grid item xs={12}>
               <TextField
                 label="Image"
@@ -126,12 +147,12 @@ export default function CreateNewTaskForm({ handleClose, open }) {
                 />
               </LocalizationProvider>
             </Grid>
-
             <Grid item xs={12}>
               <Button
-                type="submit"
                 fullWidth
                 className="customeButton"
+                type="submit"
+
                 sx={{ padding: ".9rem" }}
               >
                 Create
