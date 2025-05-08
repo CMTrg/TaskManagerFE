@@ -1,14 +1,11 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useEffect, useState } from 'react';
-import { Autocomplete, Grid } from '@mui/material';
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { fetchTaskById, updateTask } from '../../../ReduxToolkit/TaskSlice';
-import { useDispatch } from "react-redux";
+import { Grid, TextField } from '@mui/material';
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from 'react-router-dom';
+import { submitTask } from '../../../ReduxToolkit/TaskSlice'; // ✅ import đúng
 
 const style = {
   position: 'absolute',
@@ -22,82 +19,64 @@ const style = {
   p: 4,
 };
 
-export default function SubmitFormModel({item, handleClose,open}) {
-    const dispatch=useDispatch();
-    const location=useLocation();
-    const queryParams=new URLSearchParams(location.search);
-    const taskId=queryParams.get("taskId");
-    const {task}=useSelector(store=>store);
-    const [formData,setformData]=useState({
-        githubLink:"",
-        description:"",
-    });
+export default function SubmitFormModel({ item, handleClose, open }) {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const taskId = queryParams.get("taskId");
 
-    const handleChange = (e) => {
-        const {name,value}=e.target;
-        setformData({
-            ...formData,
-            [name]:value,
-        });
+  const [formData, setFormData] = useState({
+    githubLink: "",
+    description: "",
+  });
 
-    };
-    
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        dispatch(submitTask({taskId,githubLink:formData.githubLink}));
-        handleClose();
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(submitTask({ taskId, githubLink: formData.githubLink }));
+    handleClose();
+  };
 
   return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12}>
-                    <TextField
-                    label="Github Link"
-                    fullWidth
-                    name='githubLink'
-                    value={formData.githubLink}
-                    onChange={handleChange}
-                    />
-                </Grid>
-
-                <Grid item xs={12}>
-                    <TextField
-                    label="Description"
-                    fullWidth
-                    multiline
-                    rows={4}
-                    name='description'
-                    value={formData.description}
-                    onChange={handleChange}
-                    />
-                </Grid>
-             
-                <Grid item xs={12}>
-                    <Button 
-                    fullWidth
-                    className="customeButton"
-                    type="submit"
-                    sx={{padding:".9rem"}}>
-
-                        submit
-                    </Button>
-                </Grid>
+    <Modal open={open} onClose={handleClose}>
+      <Box sx={style}>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12}>
+              <TextField
+                label="Github Link"
+                fullWidth
+                name="githubLink"
+                value={formData.githubLink}
+                onChange={handleChange}
+              />
             </Grid>
-          </form>
-
-        </Box>
-      </Modal>
-    </div>
+            <Grid item xs={12}>
+              <TextField
+                label="Description"
+                fullWidth
+                multiline
+                rows={4}
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button fullWidth type="submit" className="customeButton" sx={{ padding: ".9rem" }}>
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
+    </Modal>
   );
 }
