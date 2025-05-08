@@ -6,6 +6,7 @@ import Modal from '@mui/material/Modal';
 import SubmissionCard from './SubmissionCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { fetchSubmissionByTaskId } from '../../../ReduxToolkit/TaskSlice'; // 👈 sửa đúng path nếu cần
 
 const style = {
   position: 'absolute',
@@ -19,47 +20,39 @@ const style = {
   p: 4,
 };
 
-const submissions=[1,1,1]
-export default function SubmissionList({handleClose,open}) {
-  const dispatch=useDispatch();
-  const location=useLocation();
-  const queryParams=new URLSearchParams(location.search);
-  const taskId=queryParams.get("taskId");
-  const {submissions}=useSelector(store=>store);
+export default function SubmissionList({ handleClose, open }) {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const taskId = queryParams.get("taskId");
+  const { submissions } = useSelector((store) => store.submission); // 👈 kiểm tra slice name
 
-  React.useEffect(()=>{
-    if(taskId){
-      dispatch(fetchSubmissionByTaskId(taskId))
+  React.useEffect(() => {
+    if (taskId) {
+      dispatch(fetchSubmissionByTaskId(taskId));
     }
-    
-  },[taskId])
+  }, [taskId]);
 
   return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <div>
-            {submission.submissions.length > 0 ? (
-              <div className='space-y-2'>
-                {submission.submissions.map((item) => (
-                  <SubmissionCard item={item}/>
-                ))}
-              </div>
-             ) : (
-              <div className=''>
-            <div className='text-center'> No Submission Found </div>
-          </div>
-            )}
-          </div>
-          
-
-        </Box>
-      </Modal>
-    </div>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
+        <div>
+          {submissions && submissions.length > 0 ? (
+            <div className="space-y-2">
+              {submissions.map((item) => (
+                <SubmissionCard key={item.id} item={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center">No Submission Found</div>
+          )}
+        </div>
+      </Box>
+    </Modal>
   );
 }
