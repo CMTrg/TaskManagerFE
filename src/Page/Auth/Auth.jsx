@@ -1,98 +1,52 @@
 import React, { useState } from "react";
-import { TextField, Button } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { login } from "../../ReduxToolkit/AuthSlice";
+import LoginForm from "./Signin/SigninForm";
+import SignupForm from "./Signup/SignupForm";
+import "./Auth.css";
 
-const LoginForm = ({ togglePanel }) => {
-  const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+const Auth = () => {
+  const [isRegister, setIsRegister] = useState(false);
 
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-
-    // You can add custom validation here
-    // For example, checking if the fields are empty or have specific patterns
-    // Update the errors state accordingly
-    let errorText = "";
-    if (name === "email") {
-      errorText =
-        value === ""
-          ? "Email is required"
-          : !/\S+@\S+\.\S+/.test(value)
-          ? "Please enter a valid email address"
-          : "";
-    } else if (name === "password") {
-      errorText = value === "" ? "Password is required" : "";
-    }
-
-    setErrors({ ...errors, [name]: errorText });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(login(formData))
-    console.log("Login Form Submitted ", formData);
+  const togglePanel = () => {
+    setIsRegister(!isRegister);
   };
 
   return (
-    <div className="">
-      <h1 className="text-lg font-bold text-center pb-8 textStyle">Login</h1>
-      <form className="space-y-3" onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          label="Email"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          error={!!errors.email}
-          helperText={errors.email}
-          placeholder="Enter your email"
-        />
-
-        <TextField
-          fullWidth
-          label="Password"
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-          error={!!errors.password}
-          helperText={errors.password}
-          placeholder="Enter your password"
-        />
-
-        <div>
-          <Button
-            sx={{ padding: ".7rem 0rem" }}
-            className="customeButton"
-            variant="contained"
-            color="primary"
-            type="submit"
-            fullWidth
-          >
-            Login
-          </Button>
+    <div className="flex justify-center h-screen items-center overflow-hidden ">
+      <div className="box  lg:max-w-4xl">
+        <div className={`cover ${isRegister ? "rotate-active" : ""}`}>
+          <div class="front">
+            <img
+              class=""
+              src="https://images.pexels.com/photos/13073600/pexels-photo-13073600.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              alt=""
+            />
+            <div class="text">
+              <span class="text-1">
+              Success is built upon well-organized tasks
+              </span>
+              <span class="text-2 text-xs">Let's get connected </span>
+            </div>
+          </div>
+          <div class="back">
+            <img
+              src="https://images.pexels.com/photos/12679942/pexels-photo-12679942.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              alt=""
+            />
+          </div>
         </div>
-      </form>
-
-      <div className="textStyle mt-5 flex items-center gap-2 py-5 justify-center">
-        <span>Already have an account?</span>
-        <Button className="" onClick={togglePanel} color="primary">
-          signup
-        </Button>
+        <div className="forms h-full">
+          <div className="form-content h-full ">
+            <div className="login-form ">
+              <LoginForm togglePanel={togglePanel} />
+            </div>
+            <div className="signup-form">
+              <SignupForm togglePanel={togglePanel} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default LoginForm;
+export default Auth;
