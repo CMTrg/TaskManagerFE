@@ -14,7 +14,7 @@ import { fetchTasks, fetchUsersTasks } from "./ReduxToolkit/TaskSlice";
 
 function App() {
   const dispatch=useDispatch()
-  const {auth}=useSelector(store=>store)
+  const {task,auth}=useSelector(store=>store)
   
   useEffect(()=>{
     dispatch(getUserProfile(localStorage.getItem("jwt")))
@@ -29,6 +29,7 @@ function App() {
       dispatch(fetchUsersTasks())
     }
   },[auth.user])
+  
   return (
     <ThemeProvider theme={darkTheme}>
       

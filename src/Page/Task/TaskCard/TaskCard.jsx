@@ -1,9 +1,20 @@
 import { IconButton } from '@mui/material';
 import React from 'react'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import UserList from "../UserList";
+import SubmissionList from "./SubmissionList";
+import EditTaskForm from "./EditTaskForm";
+import { deleteTask } from '../../../ReduxToolkit/TaskSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import SubmitFormModel from './SubmitFormModel';
 
 const role="ROLE_ADMIN"
-const TaskCard = () => {
+const TaskCard = ({item}) => {
+    const dispatch=useDispatch();
+    const location=useLocation();
+    const navigate=useNavigate();
+    const {auth}=useSelector(store=>store)
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
     const handleMenuClick = (event) => {
@@ -17,15 +28,32 @@ const TaskCard = () => {
         setOpenUserList(false)
     };
     const handleOpenUserList=()=>{
+        const updatedParams= new URLSearchParams(location.search)
+        updatedParams.set("taskId",item.id);
+        navigate(`${laocation.pathname}?${updatedParams.toString()}`)
         setOpenUserList(true);
         handleMenuClose();
     };
 
+    const [OpenSubmitFormModel,setOpenSubmitFormModel]=useState(false);
+    const handleCloseSubmitFormModel=()=>{
+        setOpenSubmitFormModel(false)
+    };
+    const handleOpenSubmitFormModel=()=>{
+        const updatedParams= new URLSearchParams(location.search)
+        updatedParams.set("taskId",item.id);
+        navigate(`${location.pathname}?${updatedParams.toString()}`)
+        setOpenSubmitFormModel(true);
+        handleMenuClose();
+    };
     const [OpenSubmissionList,setOpenSubmissionList]=useState(false);
     const handleCloseSubmissionList=()=>{
         setOpenSubmissionList(false)
     };
     const handleOpenSubmissionList=()=>{
+        const updatedParams= new URLSearchParams(location.search)
+        updatedParams.set("taskId",item.id);
+        navigate(`${location.pathname}?${updatedParams.toString()}`)
         SetOpenSubmissionList(true);
         handleMenuClose();
     };
@@ -33,12 +61,26 @@ const TaskCard = () => {
     const handleCloseUpdateTaskForm=()=>{
         setOpenUpdateTaskForm(false)
     };
+
+    const handleRemoveTaskIdParams=()=>{
+        const updatedParams= new URLSearchParams(location.search)
+        updatedParams.delete("filter");
+      const queryString = updatedParams.toString();
+      const updatedPath = queryString
+        ? `${location.pathname}?${queryString}`
+        : location.pathname;
+
+      navigate(updatedPath);
+    }
     const handleOpenUpdateTaskModel=()=>{
+        const updatedParams= new URLSearchParams(location.search)
+        updatedParams.set("taskId",item.id);
+        navigate(`${location.pathname}?${updatedParams.toString()}`)
         setOpenUpdateTaskForm(true);
         handleMenuClose();
     };
     const handleDeleteTask=()=>{
-        
+        dispatch(deleteTask(item.id))
         handleMenuClose()
     };
 
@@ -47,20 +89,20 @@ const TaskCard = () => {
             <div className='card lg:flex justify-between'>
                 <div className='lg:flex gap-5 items-center space-y-2 w-[90%] lg:w-[70%]'>
                     <div className='lg:w- [7rem] lg:h-[7rem] object-cover'>
-                        <img src="https://scontent.fsgn5-5.fna.fbcdn.net/v/t39.30808-1/445389252_2147342955611497_3749755295331241284_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=108&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeECra5xmIvnI-ULPeThtN517mQ0c7cYi0juZDRztxiLSPqd0AvXu6n6Rc1nJsZC8QBDqpr7GAiB8nMU6Bl0pHCN&_nc_ohc=m6sullwB-CYQ7kNvwFcZNOh&_nc_oc=AdnL3cIqEf7nGHUECbFX2YaRxYD8v0keIa0tqIS13Qoc1RtExIR23lBM-R6BFJlfBD8&_nc_zt=24&_nc_ht=scontent.fsgn5-5.fna&_nc_gid=A3TMWTgYWmg_7A9iMmrFrA&oh=00_AfH8aSvoTKPkRrK2unJL2dNYNyhStVVRxuC2tlDjAvXptA&oe=680FD71B" alt="" />
+                        <img src={item.image} alt="" />
                     
                     </div>
                     <div className='space-y-5'>
                         <div className='space-y-2'>
-                            <h1 className='font-bold text-lg'>Car Rental Website</h1>
-                            <p className='text-gray-500 text-sm'>use lastest framworks and technology to make this website</p>
+                            <h1 className='font-bold text-lg'>{item.title}</h1>
+                            <p className='text-gray-500 text-sm'>{item.description}</p>
                         
                         </div>
                         
                         <div className='flex flex-wrap gap-2 items-center'>
 
-                            {[1,1,1,1].map((item)=><span className='py-1 px-5 rounded-full techStack'>
-                                Angular
+                            {item.tags.map((item)=><span className='py-1 px-5 rounded-full techStack'>
+                                {item}
                             </span>)}
                         </div>
                     </div>
@@ -83,7 +125,7 @@ const TaskCard = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        {role==="ROLE_ADMIN" ? (
+        {auth.user?.role === "ROLE_ADMIN" ? (
             <>
                 <MenuItem onClick={handleOpenUserList}>Assigned User</MenuItem>
                 <MenuItem onClick={handleOpenSubmissionList}>See Submissions</MenuItem>
@@ -91,14 +133,17 @@ const TaskCard = () => {
                 <MenuItem onClick={handleDeleteTask}>Delete</MenuItem>
             </>
             ) : (
-            <></>
+            <>
+            <MenuItem onClick={handleOpenSubmitFormModel}>submit</MenuItem>
+            </>
         )}
                     </Menu>
                 </div>
             </div>
             <UserList open={OpenUserList} handleCLose={handleCloseUserList}/>
             <SubmissionList open={openSubmissionList} handleClose={handleCloseSubmissionList}/>
-            <EditTaskForm open={OpenUpdateTaskForm} handleClose={handleCloseUpdateTaskForm}/>
+            <EditTaskForm item={item} open={OpenUpdateTaskForm} handleClose={handleCloseUpdateTaskForm}/>
+            <SubmitFormModel open={OpenSubmitFormModel} handleClose={handleCloseSubmitFormModel}/>
         </div>
     );
 };
