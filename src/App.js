@@ -1,10 +1,11 @@
 import { ThemeProvider } from "@mui/material";
 import "./App.css";
+import React from 'react';
 
-import Home from "./pages/Home/Home";
-import darkTheme from "./theme/darkTheme";
-import Navbar from "./pages/Navbar/Navbar";
-import Auth from "./pages/Auth/Auth";
+import Home from "./Page/Home/Home";
+import { darkTheme } from "./theme/darkTheme";
+import Navbar from "./Page/NavBar/NavBar";
+import Auth from "./Page/Auth/Auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getUserProfile } from "./ReduxToolkit/AuthSlice";

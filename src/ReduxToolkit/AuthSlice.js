@@ -1,7 +1,7 @@
 // authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { BASE_URL, api, setAuthHeader } from '../Api/api';
+import { BASE_URL, api, setAuthHeader } from '../api/api';
 
 export const login = createAsyncThunk('auth/login', async (userData) => {
   try {

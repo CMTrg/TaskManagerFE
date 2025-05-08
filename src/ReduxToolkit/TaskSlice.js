@@ -1,7 +1,7 @@
 // taskSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { api, setAuthHeader } from "../Api/api";
+import { api, setAuthHeader } from "../api/api";
 
 export const fetchTasks = createAsyncThunk(
   "task/fetchTasks",

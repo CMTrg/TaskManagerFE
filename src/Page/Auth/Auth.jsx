@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { login } from "../../../ReduxToolkit/AuthSlice";
+import { login } from "../../ReduxToolkit/AuthSlice";
 
 const LoginForm = ({ togglePanel }) => {
   const dispatch = useDispatch();

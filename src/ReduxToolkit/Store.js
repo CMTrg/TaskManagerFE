@@ -14,7 +14,6 @@ const rootReducer = combineReducers({
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
   // Add middleware, devTools, or other configurations here if needed
 });
 
